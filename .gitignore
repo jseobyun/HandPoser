@@ -1,0 +1,15 @@
+*.json
+*.mat
+*.npy
+*.npz
+*.zip
+*.tar
+*.avi
+*.mp4
+*.webm
+*.png
+*.jpg
+*.JPG
+*.PNG
+__pycache__/
+.idea/
