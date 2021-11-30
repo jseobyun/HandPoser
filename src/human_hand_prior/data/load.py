@@ -4,10 +4,10 @@ import torch
 import torch.utils.data as TD
 import numpy as np
 
-from data.freihand import FreiHand
-from data.interhand import InterHand
+from src.human_hand_prior.data.freihand import FreiHand
+from src.human_hand_prior.data.interhand import InterHand
 
-def dataset_exists(dataset_name, dataset_dir, split_names=None):
+def check_dataset(dataset_name, dataset_dir, split_names=None):
     if dataset_name.lower() not in ['freihand', 'interhand']:
         return False
     if dataset_dir is None:
@@ -48,28 +48,43 @@ def dataset_exists(dataset_name, dataset_dir, split_names=None):
     else:
         return False
 
-def dataset_load(dataset_name, dataset_dir, split_name):
+def load_dataset(dataset_name, dataset_dir, split_name):
     if dataset_name.lower() == 'interhand':
         dataset = InterHand(dataset_dir, split_name)
     elif dataset_name.lower() =='freihand':
         dataset = FreiHand(dataset_dir, split_name)
     else:
-        None
+        dataset = None
+    return dataset
 
 
-def dataloader
+def build_data_loader(dataset_names,
+                      dataset_dir,
+                      split_name,
+                      batch_size,
+                      shuffle,
+                      pin_memory,
+                      drop_last,
+                      num_workers=1):
+    assert split_name in ['train', 'test', 'valid']
+    if not isinstance(dataset_names, list) and isinstance(dataset_names, str):
+        dataset_names = [dataset_names]
+    for dataset_name in dataset_names:
+        assert check_dataset(dataset_name, dataset_dir, split_name)
 
+    all_dataset = []
+    for dataset_name in dataset_names:
+        if check_dataset(dataset_name, dataset_dir, split_name):
+            all_dataset.append(load_dataset(dataset_name, dataset_dir, split_name))
 
-class HandPoserDataset(TD.Dataset):
-    def __init__(self, dataset_names, dataset_dir, split_name):
-        assert split_name in ['train', 'test', 'valid']
-        if not isinstance(dataset_names, list) and isinstance(dataset_names, str):
-            dataset_names = [dataset_names]
-        for dataset_name in dataset_names:
-            assert dataset_exists(dataset_name, dataset_dir, split_name)
+    assert len(all_dataset) != 0, "HandPoser dataset is not built"
 
-        self.dataset_names = dataset_names
-        self.dataset_dir = dataset_dir
-        self.split_name = split_name
-
-        data =
+    all_datset = TD.ConcatDataset(all_dataset)
+    data_loader = TD.DataLoader(all_datset,
+                                batch_size=batch_size,
+                                shuffle=shuffle,
+                                num_workers=num_workers,
+                                pin_memory=pin_memory,
+                                drop_last=drop_last
+                                )
+    return data_loader

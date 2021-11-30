@@ -1,0 +1,39 @@
+---
+general:
+  expr_name : 0
+  dataset_names: [freihand , interhand]
+  dataset_dir : /home/jseob/Desktop/yjs/data
+  mano_dir : /home/jseob/Desktop/yjs/data/mano_v1_2
+  log_dir : ../output/log
+  snapshot_dir : ../output/snapshot
+  random_seed : 100    
+
+train_params:
+  num_gpu: 1
+  batch_size: 128
+  num_epoch: 100
+  continue_train: True
+  optimizer_type: Adam
+  optimizer_args:
+    lr: 0.001
+    weight_decay: 0.00001
+
+  lr_scheduler_type: ReduceLROnPlateau
+  lr_scheduler_args:
+    verbose: True
+    patience: 5
+  early_stopping:
+    monitor: val_loss
+    min_delta: 0.0
+    patience: 10
+    verbose: True
+    mode: min
+  keep_extran_loss_terms_until_epoch: 15    
+  loss_weight_KL: 0.005
+  loss_weight_vert: 4
+  loss_weight_matrot: 2
+  loss_weight_jtr : 2
+
+model_params:
+  num_neurons: 512
+  latentD : 32

@@ -1,2 +1,6 @@
 pip install opencv-python
 pip install configer
+pip install pyrender
+pip install chumpy
+pip install pytorch-lightning
+pip install dotmap
