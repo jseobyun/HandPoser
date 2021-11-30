@@ -13,3 +13,7 @@
 *.PNG
 __pycache__/
 .idea/
+output/
+output/log
+output/snapshot
+*.ckpt
