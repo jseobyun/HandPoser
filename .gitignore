@@ -13,7 +13,9 @@
 *.PNG
 __pycache__/
 .idea/
-output/
-output/log
-output/snapshot
+src/human_hand_prior/output/
+src/human_hand_prior/output/log/
+src/human_hand_prior/output/snapshot/
+src/human_hand_prior/main/lightning_logs/
 *.ckpt
+
