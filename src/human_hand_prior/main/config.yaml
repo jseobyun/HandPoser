@@ -5,12 +5,25 @@ general:
   dataset_dir : /home/jseob/Desktop/yjs/data
   mano_dir : /home/jseob/Desktop/yjs/data/mano_v1_2
   log_dir : ../output/log
+  vis_dir : ../output/vis
   snapshot_dir : ../output/snapshot
   random_seed : 100    
 
+
+val_params:
+  vis: True
+  vis_intv: 10
+  num_gpu: 1
+  batch_size: 32
+  shuffle: False
+  pin_memory: True
+  drop_last: False
+  num_workers: 3
+  
+  
 train_params:
   num_gpu: 1
-  batch_size: 128
+  batch_size: 32
   num_epoch: 100
   continue_train: True
   optimizer_type: Adam
@@ -28,11 +41,16 @@ train_params:
     patience: 10
     verbose: True
     mode: min
-  keep_extran_loss_terms_until_epoch: 15    
+  keep_extra_loss_terms_until_epoch: 15    
   loss_weight_KL: 0.005
   loss_weight_vert: 4
   loss_weight_matrot: 2
   loss_weight_jtr : 2
+  pin_memory: True
+  num_workers: 3
+  shuffle: True
+  drop_last: False
+  
 
 model_params:
   num_neurons: 512

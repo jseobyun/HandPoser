@@ -55,7 +55,7 @@ class HandPoser(nn.Module):
 
         num_neurons, self.latentD = model_ps.model_params.num_neurons, model_ps.model_params.latentD
 
-        self.num_joints = 21
+        self.num_joints = 15
         n_features = self.num_joints * 3
 
         self.encoder_net = nn.Sequential(
@@ -90,11 +90,10 @@ class HandPoser(nn.Module):
 
     def decode(self, Zin):
         bs = Zin.shape[0]
-
         prec = self.decoder_net(Zin)
 
         return {
-            'hand_pose': matrot2aa(prec.view(-1, 3, 3)).view(bs, -1, 3),
+            'hand_pose': matrot2aa(prec.view(-1, 3, 3)).reshape(bs, -1),
             'hand_pose_matrot': prec.view(bs, -1, 9)
         }
 

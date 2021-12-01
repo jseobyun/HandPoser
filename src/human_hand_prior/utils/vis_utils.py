@@ -23,14 +23,15 @@ if torch.sum(torch.abs(mano_layer['left'].shapedirs[:, 0, :] - mano_layer['right
     mano_layer['left'].shapedirs[:, 0, :] *= -1
 
 
-def vis_mano(pose, shape):
+def vis_mano(pose, shape=None):
     if np.shape(pose)[0] == 16:
         root_pose = torch.FloatTensor(pose[0]).view(1,3)
         hand_pose = torch.FloatTensor(pose[1:, :]).view(1, -1)
     elif np.shape(pose)[0] == 15:
         root_pose = torch.FloatTensor(np.array([np.pi/2, 0, 0])).view(1, 3)
         hand_pose = torch.FloatTensor(pose).view(1, -1)
-
+    if shape is None:
+        shape = np.zeros([1, 10], np.float32)
     shape = torch.FloatTensor(shape).view(1, -1)
     trans = torch.FloatTensor(np.array([0.1, 0.1, 1.2], dtype=np.float32)).view(1, 3)
 

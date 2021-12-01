@@ -19,7 +19,7 @@ def train_handposer_once(hp_ps):
 
     checkpoint_callback = ModelCheckpoint(
         dirpath=model.snapshot_dir,
-        filename=f"%{model.expr_name}_epoch{model.current_epoch}",
+        filename="%s_{epoch:03d}_{val_loss:.5f}"%model.expr_name,
         save_top_k=1,
         verbose=True,
         monitor='val_loss',
@@ -36,13 +36,11 @@ def train_handposer_once(hp_ps):
 
     trainer = pl.Trainer(gpus=hp_ps.train_params.num_gpu,
                          weights_summary='top',
-                         plugins=[DDPPlugin(find_unused_parameters=False)],
-                         callbacks=[lr_monitor, early_stop_callback, checkpoint_callback],
+                         plugins=[DDPPlugin(find_unused_parameters=True)],
+                         callbacks=[lr_monitor, checkpoint_callback, early_stop_callback], #
                          max_epochs=hp_ps.train_params.num_epoch,
-                         logger=tblogger,
-                         resume_from_checkpoint=resume_from_checkpoint
-    )
-    trainer.fit(model)
+                         logger=tblogger)
+    trainer.fit(model) # ckpt_path = last_chekcpoint
 
 
 if __name__ == '__main__':

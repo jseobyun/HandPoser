@@ -5,13 +5,8 @@ import pytorch_lightning as pl
 from src.human_hand_prior.utils.io_utils import load_config
 from src.human_hand_prior.manager.lightning_wrapper import LightingHandPoser
 from pytorch_lightning.plugins import DDPPlugin
-from pytorch_lightning.callbacks.early_stopping import EarlyStopping
-from pytorch_lightning.callbacks.model_checkpoint import ModelCheckpoint
-from pytorch_lightning.loggers import TensorBoardLogger
-from pytorch_lightning.callbacks import LearningRateMonitor
 
 def test_handposer_once(hp_ps):
-    resume_from_checkpoint = hp_ps.train_params.continue_train
     model = LightingHandPoser(hp_ps)
     last_checkpoint = None
 

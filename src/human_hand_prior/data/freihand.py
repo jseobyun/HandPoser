@@ -21,10 +21,15 @@ class FreiHand(TD.Dataset):
     def __getitem__(self, index):
         param = self.data[index][0]
         pose = np.array(param[:48]).reshape(16, 3)
-        root_pose = pose[0:1, :]
-        hand_pose = pose[1:, :]
+        root_pose = pose[0:1, :].reshape(-1)
+        hand_pose = pose[1:, :].reshape(-1)
         shape = np.array(param[48:58]).reshape(10)
-        return root_pose, hand_pose, shape
+        data = {
+            'root_pose': root_pose.astype(np.float32),
+            'hand_pose': hand_pose.astype(np.float32),
+            'hand_shape': shape.astype(np.float32),
+        }
+        return data
 
 
 if __name__ == '__main__':

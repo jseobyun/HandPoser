@@ -31,10 +31,16 @@ class InterHand(TD.Dataset):
     def __getitem__(self, index):
         sample = self.data[index]
         pose = np.array(sample['pose']).reshape(16, 3)
-        root_pose = pose[0:1, :]
-        hand_pose = pose[1:, :]
+        root_pose = pose[0:1, :].reshape(-1)
+        hand_pose = pose[1:, :].reshape(-1)
         shape = np.array(sample['shape']).reshape(10)
-        return root_pose, hand_pose, shape
+
+        data = {
+            'root_pose': root_pose.astype(np.float32),
+            'hand_pose': hand_pose.astype(np.float32),
+            'hand_shape': shape.astype(np.float32),
+        }
+        return data
 
 
 

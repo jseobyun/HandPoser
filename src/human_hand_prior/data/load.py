@@ -65,13 +65,16 @@ def build_data_loader(dataset_names,
                       shuffle,
                       pin_memory,
                       drop_last,
-                      num_workers=1):
-    assert split_name in ['train', 'test', 'valid']
+                      num_workers=1,
+                      **kwargs):
+    assert split_name in ['train', 'test', 'val']
     if not isinstance(dataset_names, list) and isinstance(dataset_names, str):
         dataset_names = [dataset_names]
     for dataset_name in dataset_names:
-        assert check_dataset(dataset_name, dataset_dir, split_name)
+        if not check_dataset(dataset_name, dataset_dir, split_name):
+            dataset_names.remove(dataset_name)
 
+    assert len(dataset_names) != 0
     all_dataset = []
     for dataset_name in dataset_names:
         if check_dataset(dataset_name, dataset_dir, split_name):
