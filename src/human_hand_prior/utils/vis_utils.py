@@ -10,18 +10,8 @@ import pyrender
 import trimesh
 import smplx
 import torch
-
-
-# mano layer
-smplx_path = '/home/jseob/Desktop/yjs/data/mano_v1_2'
-mano_layer = {'right': smplx.create(smplx_path, 'mano', use_pca=False, is_rhand=True),
-              'left': smplx.create(smplx_path, 'mano', use_pca=False, is_rhand=False)}
-
-# fix MANO shapedirs of the left hand bug (https://github.com/vchoutas/smplx/issues/48)
-if torch.sum(torch.abs(mano_layer['left'].shapedirs[:, 0, :] - mano_layer['right'].shapedirs[:, 0, :])) < 1:
-    print('Fix shapedirs bug of MANO')
-    mano_layer['left'].shapedirs[:, 0, :] *= -1
-
+root_dir = os.path.join(os.path.dirname(__file__), '../../..')
+mano_layer = smplx.create(root_dir, 'mano', use_pca=False, is_rhand=True).eval() # only right hand
 
 def vis_mano(pose, shape=None):
     if np.shape(pose)[0] == 16:

@@ -78,7 +78,13 @@ def build_data_loader(dataset_names,
     all_dataset = []
     for dataset_name in dataset_names:
         if check_dataset(dataset_name, dataset_dir, split_name):
-            all_dataset.append(load_dataset(dataset_name, dataset_dir, split_name))
+            ####
+            if dataset_name == 'interhand':
+                all_dataset.append(load_dataset(dataset_name, dataset_dir, 'train'))
+                all_dataset.append(load_dataset(dataset_name, dataset_dir, 'test'))
+                all_dataset.append(load_dataset(dataset_name, dataset_dir, 'val'))
+            else:
+                all_dataset.append(load_dataset(dataset_name, dataset_dir, split_name))
 
     assert len(all_dataset) != 0, "HandPoser dataset is not built"
 

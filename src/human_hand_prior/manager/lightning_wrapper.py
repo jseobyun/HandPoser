@@ -10,7 +10,6 @@ from torch.optim import lr_scheduler
 from src.human_hand_prior.utils.io_utils import load_config
 from src.human_hand_prior.utils.train_utils import make_deterministic, geodesic_loss_R
 from src.human_hand_prior.utils.rot_utils import aa2matrot
-from src.human_hand_prior.utils.vis_utils import vis_mano
 from src.human_hand_prior.utils.data_utils import copy2cpu
 from src.human_hand_prior.models.handposer_model import HandPoser
 from src.human_hand_prior.data.load import build_data_loader
@@ -26,11 +25,8 @@ class LightingHandPoser(LightningModule):
         self.dataset_names = self.hp_ps.general.dataset_names
         self.dataset_dir = self.hp_ps.general.dataset_dir
         self.log_dir = self.hp_ps.general.log_dir
-        self.vis_dir = self.hp_ps.general.vis_dir
         self.snapshot_dir = self.hp_ps.general.snapshot_dir
-        self.vis = self.hp_ps.val_params.vis
-        self.vis_count = -1
-        self.vis_intv = self.hp_ps.val_params.vis_intv
+
 
         self.hp_model = HandPoser(self.hp_ps)
         mano_dir = self.hp_ps.general.mano_dir
@@ -38,18 +34,6 @@ class LightingHandPoser(LightningModule):
 
     def forward(self, pose):
         result = self.hp_model(pose)
-        pose_rec = result['hand_pose']
-        if self.vis:
-            for bidx in range(pose.size(0)):
-                self.vis_count +=1
-                if self.vis_count % self.vis_intv == 0:
-                    hand_pose_ori = pose[bidx].detach().cpu()
-                    hand_pose_rec = pose_rec[bidx].detach().cpu()
-                    img_ori = vis_mano(hand_pose_ori.reshape(15,3))
-                    img_rec = vis_mano(hand_pose_rec.reshape(15,3))
-                    img = np.concatenate([img_ori, img_rec], axis=1)
-                    img_name = format(self.vis_count, '03d')+'.png'
-                    cv2.imwrite(os.path.join(self.vis_dir, img_name), img)
         return result
 
     ### About data
