@@ -3,7 +3,8 @@
 ![hand_space](asset/hand_space.png)
 ## Description
 This repository includes hand(mano) version of [VPoser](https://github.com/nghorbani/human_body_prior).
-Overall  
+
+2021.12.02 first version updated. However, the code is not well trimmed yet. 
 
 ## Installation
 **Requirements**
