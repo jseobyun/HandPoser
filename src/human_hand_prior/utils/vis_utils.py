@@ -33,7 +33,7 @@ def vis_mano(pose, shape=None):
     if shape is None:
         shape = np.zeros([1, 10], np.float32)
     shape = torch.FloatTensor(shape).view(1, -1)
-    trans = torch.FloatTensor(np.array([0.1, 0.1, 1.2], dtype=np.float32)).view(1, 3)
+    trans = torch.FloatTensor(np.array([0.05, 0.1, 1.0], dtype=np.float32)).view(1, 3)
 
     output = mano_layer['right'](global_orient=root_pose, hand_pose=hand_pose, betas=shape, transl=trans)
     mesh = output.vertices[0].numpy() * 1000  # meter to milimeter
