@@ -19,8 +19,23 @@ This repository includes hand(mano) version of [VPoser](https://github.com/nghor
 Clone this repo and run the following from the root folder:
 ```bash
 python install -r requirements.txt
+python setup.py develop
 ```
 
+## Setting
+
+Revise main/config.yaml file
+
+***Essential***
+- general.dataset_dir : the path of dataset directory that includes FreiHand and Interhand
+- general.mano_dir : the path of dataset directory that includes mano pkl file
+
+***Optional***
+- train_params.*
+- val_params.*
+- model_params.*
+
+  
 ## Data
 ```
 $data_repository
@@ -38,6 +53,16 @@ $data_repository
         |-FreiHand   
             |-training_mano.json
             |- ...
+```
+
+## Usage
+```python
+import human_hand_prior as HPoser
+
+hposer = HPoser.create()
+latent_hand_pose = ... # torch [1, 32] tensor following gaussian distribution
+hand_pose = hposer.decode(latent_hand_pose)['hand_pose']
+
 ```
 
 ## Result
